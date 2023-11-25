@@ -1,6 +1,6 @@
 import React from "react";
 
-const SearchBar = ({ searchQuery, handleSearch }) => {
+const Search = ({ searchQuery, handleSearch }) => {
   return (
     <input
       type="text"
@@ -12,4 +12,4 @@ const SearchBar = ({ searchQuery, handleSearch }) => {
   );
 };
 
-export default SearchBar;
+export default Search;

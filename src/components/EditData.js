@@ -1,6 +1,6 @@
 import React from "react";
 
-const EditModal = ({ editRowData, setIsModalOpen }) => {
+const EditData = ({ editRowData, setIsModalOpen }) => {
   return (
     <div className="modal">
       <div className="modal-content">
@@ -15,4 +15,4 @@ const EditModal = ({ editRowData, setIsModalOpen }) => {
   );
 };
 
-export default EditModal;
+export default EditData;

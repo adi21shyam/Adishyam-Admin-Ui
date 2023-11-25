@@ -1,5 +1,5 @@
 import React from "react";
-import TableRow from "./TableRow";
+import Row from "./Row";
 
 const Table = ({
   users,
@@ -33,7 +33,7 @@ const Table = ({
       </thead>
       <tbody>
         {users.map((user) => (
-          <TableRow
+          <Row
             key={user.id}
             user={user}
             selected={selectedRows.includes(user.id)}

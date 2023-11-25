@@ -1,15 +1,15 @@
-import UserManagementInterface from "../components/UserManagementInterface";
+import Interface from "../components/Interface";
 import "../index.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function Main() {
+function Admin() {
   return (
     <div className="Main">
-      <UserManagementInterface />
+      <Interface />
       <ToastContainer autoClose={1000} />
     </div>
   );
 }
 
-export default Main;
+export default Admin;

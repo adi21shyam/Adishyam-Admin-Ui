@@ -1,6 +1,6 @@
 import React from "react";
 
-const TableRow = ({
+const Row = ({
   user,
   selected,
   handleRowSelection,
@@ -32,4 +32,4 @@ const TableRow = ({
   );
 };
 
-export default TableRow;
+export default Row;

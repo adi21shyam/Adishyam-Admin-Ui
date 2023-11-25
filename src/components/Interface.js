@@ -1,36 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "../styles/UserManagementInterface.css";
+import "../styles/style.css";
 import { toast } from "react-toastify";
 import Table from "./Table";
-import SearchBar from "./SearchBar";
-import Pagination from "./Pagination";
-import DeleteSelectedButton from "./DeleteSelectedButton";
-import EditModal from "./EditModal";
+import Search from "./Search";
+import PageHandler from "./PageHandler";
+import DeleteButton from "./DeleteButton";
+import EditData from "./EditData";
 
-const API_URL =
+const URL =
   "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json";
 
-const UserManagementInterface = () => {
+const Interface = () => {
   const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [filterUsers, setfilterUsers] = useState([]);
+  const [page, setpage] = useState(1);
+  const [searchText, setsearchText] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editRowData, setEditRowData] = useState(null);
+  const [modalOpen, setmodalOpen] = useState(false);
+  const [editData, seteditData] = useState(null);
 
   const itemsPerPage = 10;
 
   useEffect(() => {
-    fetchUsers();
+    fetchTheData();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchTheData = async () => {
     try {
-      const response = await axios.get(API_URL);
+      const response = await axios.get(URL);
       setUsers(response.data);
-      setFilteredUsers(response.data);
+      setfilterUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -38,7 +38,7 @@ const UserManagementInterface = () => {
 
   const handleSearch = (e) => {
     const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
+    setsearchText(query);
 
     const filtered = users.filter(
       (user) =>
@@ -47,14 +47,14 @@ const UserManagementInterface = () => {
         user.email.toLowerCase().includes(query) ||
         user.role.toLowerCase().includes(query)
     );
-    setFilteredUsers(filtered);
-    setCurrentPage(1);
+    setfilterUsers(filtered);
+    setpage(1);
   };
 
   const handleEdit = (id) => {
-    const rowToEdit = filteredUsers.find((user) => user.id === id);
-    setEditRowData(rowToEdit);
-    setIsModalOpen(true);
+    const rowToEdit = filterUsers.find((user) => user.id === id);
+    seteditData(rowToEdit);
+    setmodalOpen(true);
   };
 
   const handleDelete = (id) => {
@@ -63,25 +63,25 @@ const UserManagementInterface = () => {
       return;
     }
 
-    setFilteredUsers((prevFilteredUsers) =>
-      prevFilteredUsers.filter((user) => user.id !== id)
+    setfilterUsers((prevfilterUsers) =>
+      prevfilterUsers.filter((user) => user.id !== id)
     );
 
     toast.error("Deleted Successfully!");
   };
 
-  const handlePagination = (page) => {
-    setCurrentPage(page);
+  const handlePage = (page) => {
+    setpage(page);
   };
 
   const handleSelectAllRows = (event) => {
     const { checked } = event.target;
-    const allRowIds = currentUsers.map((user) => user.id); // Use currentUsers instead of filteredUsers
+    const allRowIds = currentUsers.map((user) => user.id); // Use currentUsers instead of filterUsers
 
     if (checked && selectedRows.length !== allRowIds.length) {
       setSelectedRows(allRowIds);
       toast.warn("Hey You Selected All !", {
-        position: toast.POSITION.TOP_CENTER,
+        position: toast.POSITION.BOTTOM_CENTER,
         theme: "dark",
       });
     } else {
@@ -109,19 +109,19 @@ const UserManagementInterface = () => {
       (user) => !selectedRows.includes(user.id)
     );
     setUsers(updatedUsers);
-    setFilteredUsers(updatedUsers);
+    setfilterUsers(updatedUsers);
     setSelectedRows([]);
     toast.error("Selected rows deleted successfully");
   };
 
   // Calculate the current page's subset of users
-  const startIndex = (currentPage - 1) * itemsPerPage;
+  const startIndex = (page - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentUsers = filteredUsers.slice(startIndex, endIndex);
+  const currentUsers = filterUsers.slice(startIndex, endIndex);
 
   return (
     <div className="container">
-      <SearchBar searchQuery={searchQuery} handleSearch={handleSearch} />
+      <Search searchText={searchText} handleSearch={handleSearch} />
       <Table
         users={currentUsers}
         selectedRows={selectedRows}
@@ -130,21 +130,21 @@ const UserManagementInterface = () => {
         handleDelete={handleDelete}
         handleSelectAllRows={handleSelectAllRows}
       />
-      <Pagination
-        currentPage={currentPage}
+      <PageHandler
+        page={page}
         itemsPerPage={itemsPerPage}
-        totalItems={filteredUsers.length}
-        handlePagination={handlePagination}
+        totalItems={filterUsers.length}
+        handlePagination={handlePage}
       />
-      <DeleteSelectedButton
+      <DeleteButton
         handleDeleteSelected={handleDeleteSelected}
         selectedRows={selectedRows}
       />
-      {isModalOpen && (
-        <EditModal editRowData={editRowData} setIsModalOpen={setIsModalOpen} />
+      {modalOpen && (
+        <EditData editData={editData} setmodalOpen={setmodalOpen} />
       )}
     </div>
   );
 };
 
-export default UserManagementInterface;
+export default Interface;

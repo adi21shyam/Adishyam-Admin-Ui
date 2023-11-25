@@ -1,7 +1,7 @@
 import React from "react";
 import "@fortawesome/fontawesome-free/css/all.css";
 
-const Pagination = ({
+const PageHandler = ({
   currentPage,
   itemsPerPage,
   totalItems,
@@ -70,4 +70,4 @@ const Pagination = ({
   return <div className="pagination">{renderPaginationButtons()}</div>;
 };
 
-export default Pagination;
+export default PageHandler;
